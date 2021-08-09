@@ -23,4 +23,4 @@ public class TestDTO {
 }
 ````
 
-isSuccess함수 
+isSuccess함수 추가
