@@ -123,6 +123,9 @@ public class Account {
 : 같은 객체인지 확인하는 메소드는 equals()이다.   
 [출처](https://velog.io/@gloom/Lombok-Data%EC%9D%98-EqualsAndHashCode%EC%9D%B4-%EB%AD%90%ED%95%98%EB%8A%94-%EC%95%A0%EC%9D%BC%EA%B9%8C)
 
+- 무분별한 @EqualsAndHashCode 사용 자제
+[권남-참고](https://kwonnam.pe.kr/wiki/java/lombok/pitfall)
+
 ## lombok.config 설정 ##
 - @Data 등 사용을 했을 경우 위험 부담이 있는 어노테이션들은 해당 설정에서 제한 할 수 있다.
 - lombok.config 파일을 작성한 뒤 Proejct root path에 위치 시킨다.
