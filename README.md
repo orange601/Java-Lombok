@@ -1,19 +1,15 @@
-# Lombok-Issue
-Lombok - is로 시작하는 변수명 사라짐
-
-
-## IS로 시작하는 변수명 사라짐 ##
+## Lombok-Issue ##
+- is로 시작하는 변수명 사라짐
 ````java
+// json으로 변경시 "isSuccess"가 아닌 "success" 로 표기됨
 @Data
 public class TestDTO {
     private boolean isSuccess;
 }
 ````
-"success": true 로 표기됨
 
-
-## 해결방법 ##
 ````java
+// 해결방법 // isSuccess함수 추가
 @Data
 public class TestDTO {
     private boolean isSuccess;
@@ -23,4 +19,3 @@ public class TestDTO {
 }
 ````
 
-isSuccess함수 추가
