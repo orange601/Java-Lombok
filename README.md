@@ -77,6 +77,45 @@ Order order = new Order(5000L, 10000L); // 인자값의 순서 변경 없음
 ## @Setter 사용금지 ##
 - Setter는 의도가 분명하지 않고, 객체를 언제든지 변경할 수 있는 상태가 되어서 객체의 안전성을 보장받기 힘들다.
 
+## @Builder 안전하게 생성하기 ##
+````java
+@Embeddable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Account {
+
+  @NotEmpty @Column(name = "bank_name", nullable = false)
+  private String bankName;
+
+  @NotEmpty @Column(name = "account_number", nullable = false)
+  private String accountNumber;
+
+  @NotEmpty @Column(name = "account_holder", nullable = false)
+  private String accountHolder;
+
+  // 불안전한 객채 생성 패턴
+  @Builder
+  public Account(String bankName, String accountNumber, String accountHolder) {
+    this.bankName = bankName;
+    this.accountNumber = accountNumber;
+    this.accountHolder = accountHolder;
+  }
+
+  // 안전한 객채 생성 패턴
+  @Builder
+  public Account(String bankName, String accountNumber, String accountHolder) {
+    Assert.hasText(bankName, "bankName must not be empty");
+    Assert.hasText(accountNumber, "accountNumber must not be empty");
+    Assert.hasText(accountHolder, "accountHolder must not be empty");
+
+    this.bankName = bankName;
+    this.accountNumber = accountNumber;
+    this.accountHolder = accountHolder;
+  }
+}
+````
+[출처](https://cheese10yun.github.io/spring-builder-pattern/)
+
 ## lombok.config 설정 ##
 - @Data 등 사용을 했을 경우 위험 부담이 있는 어노테이션들은 해당 설정에서 제한 할 수 있다.
 - lombok.config 파일을 작성한 뒤 Proejct root path에 위치 시킨다.
