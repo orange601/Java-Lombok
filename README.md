@@ -27,15 +27,7 @@
 ## @Builder ##
 : 의미있는 객체 생성
 
-1. 생성자에 @Builder 사용 권장
-    - 필요한 데이터만 설정할 수 있다. 
-
-2. 클래스 레벨에서 @Builder 사용 금지
-    - @NoArgsConstructor를 함께 쓰면 오류가 발생
-    - 이를 해결하기 위해 모든 필드를 가지는 생성자를 만드는 @AllArgsConstructor 사용해야 한다.
-    - 하지만 @AllArgsConstructor의 문제점이 아래와 같이 존재한다.
-
-3.기본값 설정
+1.기본값 설정
     - @Builder.Default 사용   
     
 ````java
@@ -44,9 +36,58 @@
 public class User {
   private String name;
   @Builder.Default private int age = 19;
-  private int num = 19; // Builder.Default 사용하지 않았기 때문에 기본값은 0이다.
+  private int num = 19; // @Builder.Default 사용하지 않았기 때문에 기본값은 0이다.
 }
 ````
+
+2. 생성자에 @Builder 사용 권장
+    - 필요한 데이터만 설정할 수 있다. 
+
+3. @Builder 안전하게 생성하기
+````java
+@Embeddable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Account {
+
+  @NotEmpty @Column(name = "bank_name", nullable = false)
+  private String bankName;
+
+  @NotEmpty @Column(name = "account_number", nullable = false)
+  private String accountNumber;
+
+  @NotEmpty @Column(name = "account_holder", nullable = false)
+  private String accountHolder;
+
+  // 불안전한 객채 생성 패턴
+  @Builder
+  public Account(String bankName, String accountNumber, String accountHolder) {
+    this.bankName = bankName;
+    this.accountNumber = accountNumber;
+    this.accountHolder = accountHolder;
+  }
+
+  // 안전한 객채 생성 패턴
+  @Builder
+  public Account(String bankName, String accountNumber, String accountHolder) {
+    Assert.hasText(bankName, "bankName must not be empty");
+    Assert.hasText(accountNumber, "accountNumber must not be empty");
+    Assert.hasText(accountHolder, "accountHolder must not be empty");
+
+    this.bankName = bankName;
+    this.accountNumber = accountNumber;
+    this.accountHolder = accountHolder;
+  }
+}
+````
+[출처](https://cheese10yun.github.io/spring-builder-pattern/)
+
+4. 클래스 레벨에서 @Builder 사용 금지
+    - @NoArgsConstructor를 함께 쓰면 오류가 발생
+    - 이를 해결하기 위해 모든 필드를 가지는 생성자를 만드는 @AllArgsConstructor 사용해야 한다.
+    - 하지만 @AllArgsConstructor의 문제점이 아래와 같이 존재한다.
+
+
 
 ## @AllArgsConstructor 사용금지 ##
 : 해당 객체 내에 있는 모든 변수들을 인수로 받는 생성자를 만들어내는 어노테이션
@@ -88,45 +129,6 @@ Order order = new Order(5000L, 10000L); // 인자값의 순서 변경 없음
 
 ## @Setter 사용금지 ##
 - Setter는 의도가 분명하지 않고, 객체를 언제든지 변경할 수 있는 상태가 되어서 객체의 안전성을 보장받기 힘들다.
-
-## @Builder 안전하게 생성하기 ##
-````java
-@Embeddable
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Account {
-
-  @NotEmpty @Column(name = "bank_name", nullable = false)
-  private String bankName;
-
-  @NotEmpty @Column(name = "account_number", nullable = false)
-  private String accountNumber;
-
-  @NotEmpty @Column(name = "account_holder", nullable = false)
-  private String accountHolder;
-
-  // 불안전한 객채 생성 패턴
-  @Builder
-  public Account(String bankName, String accountNumber, String accountHolder) {
-    this.bankName = bankName;
-    this.accountNumber = accountNumber;
-    this.accountHolder = accountHolder;
-  }
-
-  // 안전한 객채 생성 패턴
-  @Builder
-  public Account(String bankName, String accountNumber, String accountHolder) {
-    Assert.hasText(bankName, "bankName must not be empty");
-    Assert.hasText(accountNumber, "accountNumber must not be empty");
-    Assert.hasText(accountHolder, "accountHolder must not be empty");
-
-    this.bankName = bankName;
-    this.accountNumber = accountNumber;
-    this.accountHolder = accountHolder;
-  }
-}
-````
-[출처](https://cheese10yun.github.io/spring-builder-pattern/)
 
 ## @EqualsAndHashCode ##
 - 자바 bean에서 동등성 비교를 위해 equals와 hashcode 메소드를 오버라이딩해서 사용하는데, 
