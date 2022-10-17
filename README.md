@@ -35,6 +35,17 @@
     - 이를 해결하기 위해 모든 필드를 가지는 생성자를 만드는 @AllArgsConstructor 사용해야 한다.
     - 하지만 @AllArgsConstructor의 문제점이 아래와 같이 존재한다.
 
+3.기본값 설정
+    - @Builder.Default 사용
+    ````java
+    @Data
+    @Builder
+    public class User {
+      private String name;
+      @Builder.Default private int age = 19;
+      private int num = 19; // Builder.Default 사용하지 않았기 때문에 기본값은 0이다.
+    }
+    ````
 
 ## @AllArgsConstructor 사용금지 ##
 : 해당 객체 내에 있는 모든 변수들을 인수로 받는 생성자를 만들어내는 어노테이션
