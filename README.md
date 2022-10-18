@@ -209,7 +209,7 @@ public class TestDTO {
 ````
 
 ````java
-// 해결방법 // isSuccess함수 추가
+// 해결방법 // getIsSuccess함수 추가
 @Data
 public class TestDTO {
     private boolean isSuccess;
