@@ -2,8 +2,9 @@
 - 실무에서 Lombok 잘 사용하기
 
 ## @Data 지양 ##
-- 너무 많은 어노테이션(기능)을 포함한다. 그에 따른 부작용도 많다.   
+- 너무 많은 어노테이션(기능)을 포함한다.
 - @ToString, @EqualsAndHashCode, @Getter, @Setter, @RequiredArgsConstructor
+- 그에 따른 부작용도 많다.
 
 1. 무분별한 Setter 남용
     -  Setter는 의도가 분명하지 않고, 객체를 언제든지 변경할 수 있는 상태가 되어서 객체의 안전성을 보장받기 힘들다.
