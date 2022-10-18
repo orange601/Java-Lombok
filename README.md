@@ -147,6 +147,56 @@ Order order = new Order(5000L, 10000L); // 인자값의 순서 변경 없음
 lombok.data.flagUsage= error
 ````
 
+
+## @Embeddable ##
+- Entity 내부의 값을 더 응집시켜 **객체로 데이터를 표현**한다.
+- Lombok기능은 아니지만, Lombok과 같이 사용하면 좋은 Annotation이다.
+
+````java
+// @Embeddable 사용하기전
+@Entity
+@Table(name = "user")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="user_id")
+    private Long id;
+    private String name;
+    private String phoneNum;
+    
+    // [주소] 라는 객체로 묶어서 관리
+    private String zipCode;
+    private String address;
+    private String addressDetail;
+}
+````
+
+````java
+// @Embeddable 적용 후
+@Entity
+@Table(name = "user")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="user_id")
+    private Long id;
+    private String name;
+    private String phoneNum;
+    
+    @Embedded
+    private Address address;
+}
+
+@Embeddable
+public class Address {
+    private String zipCode;
+    private String address;
+    private String addressDetail;
+}
+````
+
+
+
 ## Lombok-Issue ##
 - is로 시작하는 변수명 사라짐
 ````java
