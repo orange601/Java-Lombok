@@ -165,7 +165,7 @@ public class User {
     private String name;
     private String phoneNum;
     
-    // @Embedded 통해 아래 3개필드는 Address 라는 객체로 묶어서 관리하는게 주소라는 의미를 확실하게 표현
+    // @Embedded 통해 아래 3개필드는 Address 라는 객체로 묶어서 관리하는게 주소라는 의미를 확실하게 표현 할 수 있다.
     private String zipCode;
     private String address;
     private String addressDetail;
