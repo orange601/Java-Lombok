@@ -89,6 +89,44 @@ public class Account {
     - 하지만 @AllArgsConstructor의 문제점이 아래와 같이 존재한다.
 
 
+5. Builder 이름으로 책임을 부여 하자
+주문에 대해 신용카드취소, 계좌 기반 환불이 있다고 가정하자.
+= 신용카드 취소 / 계좌 기반 환불에 대해 각각 정의하여 @Builder설계
+
+````java
+public class Refund {
+   private Long id;
+   private Account account;
+   private CreditCard creditCard;
+   private Order order;
+
+   @Builder(builderMethodName = "of", builderClassName = "of")
+   private Refund(Account account, CreditCard creditCard, Order order) {
+       this.account = account;
+       this.creditCard = creditCard;
+       this.order = order;
+   }
+
+   // 계좌 기반 환불
+   @Builder(builderClassName = "byAccountBuilder", builderMethodName = "byAccountBuilder")
+   public static Refund byAccount(Account account, Order order) {
+       Assert.notNull(account, "account must not be null");
+       Assert.notNull(order, "order must not be null");
+
+       return Refund.of().account(account).order(order).build();
+   }
+
+   // 신용카드 환불
+   @Builder(builderClassName = "byCreditBuilder", builderMethodName = "byCreditBuilder")
+   public static Refund byCredit(CreditCard creditCard, Order order) {
+       Assert.notNull(creditCard, "creditCard must not be null");
+       Assert.notNull(order, "order must not be null");
+
+       return Refund.of().creditCard(creditCard).order(order).build();
+   }
+}
+````
+출처: https://velog.io/@dahye4321/%EC%8A%A4%ED%94%84%EB%A7%81-%EA%B0%80%EC%9D%B4%EB%93%9C-2
 
 ## @AllArgsConstructor 사용금지 ##
 - 해당 객체 내에 있는 모든 변수들을 인수로 받는 생성자를 만들어내는 어노테이션
