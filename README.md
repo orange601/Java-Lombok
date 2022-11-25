@@ -28,7 +28,7 @@
 ## @Builder ##
 - 의미있는 객체 생성
 
-1.기본값 설정
+#### 1. 기본값 설정 ####
     - @Builder.Default 사용   
     
 ````java
@@ -41,10 +41,11 @@ public class User {
 }
 ````
 
-2. 생성자에 @Builder 사용 권장
+#### 2. 생성자에 @Builder 사용 권장 ####
     - 필요한 데이터만 설정할 수 있다. 
 
-3. @Builder 안전하게 생성하기
+#### 3. @Builder 안전하게 생성하기 ####
+
 ````java
 @Embeddable
 @Getter
@@ -83,13 +84,13 @@ public class Account {
 ````
 [출처](https://cheese10yun.github.io/spring-builder-pattern/)
 
-4. 클래스 레벨에서 @Builder 사용 금지
+#### 4. 클래스 레벨에서 @Builder 사용 금지 ####
     - @NoArgsConstructor를 함께 쓰면 오류가 발생
     - 이를 해결하기 위해 모든 필드를 가지는 생성자를 만드는 @AllArgsConstructor 사용해야 한다.
     - 하지만 @AllArgsConstructor의 문제점이 아래와 같이 존재한다.
 
 
-5. Builder 이름으로 책임을 부여 하자
+#### 5. Builder 이름으로 책임을 부여 하자 ####
 주문에 대해 신용카드취소, 계좌 기반 환불이 있다고 가정하자.
 = 신용카드 취소 / 계좌 기반 환불에 대해 각각 정의하여 @Builder설계
 
