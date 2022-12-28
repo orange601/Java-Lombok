@@ -3,7 +3,7 @@
 
 ## @Data 지양 ##
 - 너무 많은 어노테이션(기능)을 포함한다.
-- @ToString, @EqualsAndHashCode, @Getter, @Setter, @RequiredArgsConstructor
+- @ToString, @EqualsAndHashCode, @Setter, @Getter, @RequiredArgsConstructor
 - 그에 따른 부작용도 많다.
 
 ### 1. @Tostring 무한순환참조 ###
