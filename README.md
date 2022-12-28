@@ -51,7 +51,17 @@ public class Parent {
 }
 ````
 
-### 2. @Setter 무분별한 Setter 남용 ###
+### 2. @EqualsAndHashCode ###
+- 자바 bean에서 동등성 비교를 위해 equals와 hashcode 메소드를 오버라이딩해서 사용하는데, 
+- @EqualsAndHashCode어노테이션을 사용하면 자동으로 이 메소드를 생성할 수 있다.   
+: 두 객체의 내부의 값이 같은지 숫자로 확인하는 값은 hashcode()이다.   
+: 같은 객체인지 확인하는 메소드는 equals()이다.   
+[출처](https://velog.io/@gloom/Lombok-Data%EC%9D%98-EqualsAndHashCode%EC%9D%B4-%EB%AD%90%ED%95%98%EB%8A%94-%EC%95%A0%EC%9D%BC%EA%B9%8C)
+
+- 무분별한 @EqualsAndHashCode 사용 자제
+[권남-참고](https://kwonnam.pe.kr/wiki/java/lombok/pitfall)
+
+### 3. @Setter 무분별한 Setter 남용 ###
 - Setter는 의도가 분명하지 않고, 객체를 언제든지 변경할 수 있는 상태가 되어서 객체의 안전성을 보장받기 힘들다.
 - JPA에서 Setter는 Insert(Update) 쿼리를 의미한다. Setter는 어디에서든지 호출될 수 있으므로 특정 컬럼이 어디에서 수정되었는지 파악하기 힘들고, 컬럼을 수정하기 전 검증이 필요한 경우 이를 무시할 수 있기에 무결성이 훼손되는 등의 부작용이 발생할 수 있다.
 - **@Builder** 사용으로 대체한다.
@@ -198,17 +208,19 @@ Order order = new Order(5000L, 10000L); // 인자값의 순서 변경 없음
 [출처-권남](https://kwonnam.pe.kr/wiki/java/lombok/pitfall)
 
 
+## @NoArgsConstructor 접근 권한 최소화 ##
+- 파라미터가 없는 기본 생성자를 생성
 
+1. JPA는 **프록시** 생성을 위해 기본 생성자를 반드시 하나를 생성해야 한다.
+2. 이때 접근 권한이 protected 이면 된다. 굳이 외부에서 생성을 열어 둘 필요가 없다.
+3. 아무런 값도 갖지 않는 의미 없는 객체의 생성을 막게 된다.
+4. 무분별한 객체 생성에 대해 한번 더 체크할 수 있다.
 
-## @EqualsAndHashCode ##
-- 자바 bean에서 동등성 비교를 위해 equals와 hashcode 메소드를 오버라이딩해서 사용하는데, 
-- @EqualsAndHashCode어노테이션을 사용하면 자동으로 이 메소드를 생성할 수 있다.   
-: 두 객체의 내부의 값이 같은지 숫자로 확인하는 값은 hashcode()이다.   
-: 같은 객체인지 확인하는 메소드는 equals()이다.   
-[출처](https://velog.io/@gloom/Lombok-Data%EC%9D%98-EqualsAndHashCode%EC%9D%B4-%EB%AD%90%ED%95%98%EB%8A%94-%EC%95%A0%EC%9D%BC%EA%B9%8C)
+#### 잠깐! 프록시(가짜엔티티)란? ####
+> 만약 회원 엔티티만 출력하는 사용하는 경우 em.find()로 회원 엔티티를 조회할 때 회원과 연관된 팀 엔티티까지 데이터베이스에서 함께 조회해 두는 것은 효율적이지 않다.
+> JPA는 이런 문제를 해결하려고 엔티티가 실제 사용될 때까지 데이터베이스 조회를 지연하는 방법을 제공하는데 이것을 지연 로딩이라 한다.
+> 지연 로딩 기능을 사용하려면 실제 엔티티 객체 대신에 데이터베이스 조회를 지연할 수 있는 가짜 객체가 필요한데 이것을 프록시 객체라 한다.
 
-- 무분별한 @EqualsAndHashCode 사용 자제
-[권남-참고](https://kwonnam.pe.kr/wiki/java/lombok/pitfall)
 
 ## lombok.config 설정 ##
 - @Data 등 사용을 했을 경우 위험 부담이 있는 어노테이션들은 해당 설정에서 제한 할 수 있다.
@@ -216,7 +228,6 @@ Order order = new Order(5000L, 10000L); // 인자값의 순서 변경 없음
 ````properties
 lombok.data.flagUsage= error
 ````
-
 
 ## @Embeddable ##
 - Entity 내부의 값을 더 응집시켜 **객체로 데이터를 표현**한다.
