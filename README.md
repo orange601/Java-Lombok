@@ -6,26 +6,47 @@
 - @ToString, @EqualsAndHashCode, @Getter, @Setter, @RequiredArgsConstructor
 - 그에 따른 부작용도 많다.
 
-1. 무분별한 Setter 남용
-    - Setter는 의도가 분명하지 않고, 객체를 언제든지 변경할 수 있는 상태가 되어서 객체의 안전성을 보장받기 힘들다.
-    - @Builder로 대체한다.
+## @Tostring 무한순환참조 ##
+- 양방향 연관관계시 무한 순환 참조가 발생
 
-2. ToString으로 인한 양방향 연관관계시 순환 참조 문제
-    - 무한 순환 참조가 발생. Json으로 직렬화 하는 가정에서 발생하는 문제와 동일
-    - @ToString(of = {""}) 권장
+````java
+@Getter @Setter @ToString
+public class Parent {
+	private String address;
+	private Child child;
+}
+````
+````java
+@Getter @Setter @ToString
+public class Child {
+	private String name;
+	private Parent parent;
+}
+````
+````java
+@Test
+void test() {
+	Parent parent = new Parent();
+	parent.setAddress("address");
+	
+	Child child = new Child();
+	child.setName("name");
+	
+	parent.setChild(child);
+	child.setParent(parent);
+	
+	System.out.println(parent);
+	System.out.println(child);
+}
+````
+````java
+java.lang.StackOverflowError
+````
 
-## @NoArgsConstructor 접근 권한 최소화 ##
-- 파라미터가 없는 기본 생성자를 생성
-
-1. JPA는 **프록시** 생성을 위해 기본 생성자를 반드시 하나를 생성해야 한다.
-2. 이때 접근 권한이 protected 이면 된다. 굳이 외부에서 생성을 열어 둘 필요가 없다.
-3. 아무런 값도 갖지 않는 의미 없는 객체의 생성을 막게 된다.
-4. 무분별한 객체 생성에 대해 한번 더 체크할 수 있다.
-
-#### 잠깐! 프록시(가짜엔티티)란? ####
-> 만약 회원 엔티티만 출력하는 사용하는 경우 em.find()로 회원 엔티티를 조회할 때 회원과 연관된 팀 엔티티까지 데이터베이스에서 함께 조회해 두는 것은 효율적이지 않다.
-> JPA는 이런 문제를 해결하려고 엔티티가 실제 사용될 때까지 데이터베이스 조회를 지연하는 방법을 제공하는데 이것을 지연 로딩이라 한다.
-> 지연 로딩 기능을 사용하려면 실제 엔티티 객체 대신에 데이터베이스 조회를 지연할 수 있는 가짜 객체가 필요한데 이것을 프록시 객체라 한다.
+## @Setter 무분별한 Setter 남용 ##
+- Setter는 의도가 분명하지 않고, 객체를 언제든지 변경할 수 있는 상태가 되어서 객체의 안전성을 보장받기 힘들다.
+- JPA에서 Setter는 Update 쿼리를 의미한다. Setter는 어디에서든지 호출될 수 있으므로 특정 컬럼이 어디에서 수정되었는지 파악하기 힘들고, 컬럼을 수정하기 전 검증이 필요한 경우 이를 무시할 수 있기에 무결성이 훼손되는 등의 부작용이 발생할 수 있다.
+- **@Builder** 사용으로 대체한다.
 
 ## @Builder ##
 - 의미있는 객체 생성
@@ -169,9 +190,7 @@ Order order = new Order(5000L, 10000L); // 인자값의 순서 변경 없음
 [출처-권남](https://kwonnam.pe.kr/wiki/java/lombok/pitfall)
 
 
-## @Setter 사용금지 ##
-- Setter는 의도가 분명하지 않고, 객체를 언제든지 변경할 수 있는 상태가 되어서 객체의 안전성을 보장받기 힘들다.
-- JPA에서 Setter는 Update 쿼리를 의미한다. Setter는 어디에서든지 호출될 수 있으므로 특정 컬럼이 어디에서 수정되었는지 파악하기 힘들고, 컬럼을 수정하기 전 검증이 필요한 경우 이를 무시할 수 있기에 무결성이 훼손되는 등의 부작용이 발생할 수 있다.
+
 
 ## @EqualsAndHashCode ##
 - 자바 bean에서 동등성 비교를 위해 equals와 hashcode 메소드를 오버라이딩해서 사용하는데, 
