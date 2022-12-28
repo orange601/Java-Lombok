@@ -42,6 +42,14 @@ void test() {
 ````java
 java.lang.StackOverflowError
 ````
+````java
+// ToString에 exclude추가해서 연관관계를 제외한다.
+@Getter @Setter @ToString(exclude = "child")
+public class Parent {
+	private String address;
+	private Child child;
+}
+````
 
 ### 2. @Setter 무분별한 Setter 남용 ###
 - Setter는 의도가 분명하지 않고, 객체를 언제든지 변경할 수 있는 상태가 되어서 객체의 안전성을 보장받기 힘들다.
