@@ -135,14 +135,6 @@ public class Account {
 주문에 대해 신용카드취소, 계좌 기반 환불이 있다고 가정하자.   
 = 신용카드 취소 / 계좌 기반 환불에 대해 각각 정의하여 @Builder설계
 
-### 5. 클래스 레벨에서 @Builder 사용 금지 ###
-    - @NoArgsConstructor를 함께 쓰면 오류가 발생
-    - 이를 해결하기 위해 모든 필드를 가지는 생성자를 만드는 @AllArgsConstructor 사용해야 한다.
-    - 하지만 @AllArgsConstructor의 문제점이 아래와 같이 존재한다.
-
-
-
-
 ````java
 public class Refund {
    private Long id;
@@ -176,7 +168,13 @@ public class Refund {
    }
 }
 ````
+
 출처: https://velog.io/@dahye4321/%EC%8A%A4%ED%94%84%EB%A7%81-%EA%B0%80%EC%9D%B4%EB%93%9C-2
+
+### 5. 클래스 레벨에서 @Builder 사용 금지 ###
+    - @NoArgsConstructor를 함께 쓰면 오류가 발생
+    - 이를 해결하기 위해 모든 필드를 가지는 생성자를 만드는 @AllArgsConstructor 사용해야 한다.
+    - 하지만 @AllArgsConstructor의 문제점이 아래와 같이 존재한다.
 
 ## @AllArgsConstructor 사용금지 ##
 - 해당 객체 내에 있는 모든 변수들을 인수로 받는 생성자를 만들어내는 어노테이션
