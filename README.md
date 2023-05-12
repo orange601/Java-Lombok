@@ -228,6 +228,15 @@ Order order = new Order(5000L, 10000L); // 인자값의 순서 변경 없음
 3. 아무런 값도 갖지 않는 의미 없는 객체의 생성을 막게 된다.
 4. 무분별한 객체 생성에 대해 한번 더 체크할 수 있다.
 
+````java
+import lombok.AccessLevel;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class SampleDTO {
+	...
+}
+````
+
 #### 잠깐! 프록시(가짜엔티티)란? ####
 > 만약 회원 엔티티만 출력하는 사용하는 경우 em.find()로 회원 엔티티를 조회할 때 회원과 연관된 팀 엔티티까지 데이터베이스에서 함께 조회해 두는 것은 효율적이지 않다.
 > JPA는 이런 문제를 해결하려고 엔티티가 실제 사용될 때까지 데이터베이스 조회를 지연하는 방법을 제공하는데 이것을 지연 로딩이라 한다.
